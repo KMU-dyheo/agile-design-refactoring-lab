@@ -173,8 +173,8 @@ export default function ReportPage() {
   return (
     <main className="app-shell">
       <header className="hero">
-        <p className="eyebrow">Agile Design 2 · Refactoring Lab</p>
-        <h1>Campus Issue Reporter</h1>
+        <p className="eyebrow">애자일 디자인 2 · 리팩토링 실습</p>
+        <h1>교내 시설 신고</h1>
         <p>교내 시설의 고장과 불편 사항을 사진과 위치 정보와 함께 기록합니다.</p>
       </header>
 
