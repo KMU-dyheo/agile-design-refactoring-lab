@@ -1,68 +1,97 @@
-# Classroom Lab Guide
+# 실습 가이드
 
-## Part 1 — Observe before changing
+## 1단계 — 수정하기 전에 먼저 관찰하기
 
-Open `src/pages/ReportPage.tsx`.
+다음 파일을 엽니다.
 
-Answer these questions before using an AI coding agent:
+```text
+src/pages/ReportPage.tsx
+```
 
-1. Which function is hardest to read or change?
-2. Which responsibilities are mixed together?
-3. Which values or rules are duplicated?
-4. Which parts would be hard to unit test?
-5. Which external resources does the code access directly?
+아직 코드를 수정하지 말고 다음 질문에 답합니다.
 
-## Part 2 — Small refactoring
+1. 가장 읽기 어렵거나 수정하기 어려운 함수는 무엇인가?
+2. 하나의 함수나 컴포넌트에 어떤 책임들이 섞여 있는가?
+3. 중복된 규칙이나 조건은 어디에 있는가?
+4. Unit Test를 작성하기 어려운 부분은 어디인가?
+5. 외부 환경에 직접 의존하는 부분은 무엇인가?
 
-Refactor in small steps. Recommended first targets:
+---
 
-- Rename unclear concepts if you find any.
-- Extract validation.
-- Remove duplicated category validation.
-- Extract report creation.
+## 2단계 — 작은 Refactoring
 
-After each step, run the app and confirm behavior is unchanged.
+한 번에 전체 구조를 바꾸지 않습니다.
 
-## Part 3 — Add tests
+먼저 다음과 같은 작은 변경부터 수행합니다.
 
-Once pure logic has been extracted, add tests with Vitest.
+- 필요하다면 이름을 더 명확하게 변경
+- Validation 로직 추출
+- 중복된 카테고리 Validation 제거
+- Report 생성 로직 추출
+
+각 단계가 끝날 때마다 앱을 실행해 기존 동작이 유지되는지 확인합니다.
+
+---
+
+## 3단계 — Test 추가
+
+순수한 로직이 분리되었다면 Vitest로 Test를 추가합니다.
 
 ```bash
 npm run test
 ```
 
-Focus tests on observable behavior rather than the exact internal method structure.
+내부 구현 방식보다 **외부에서 관찰 가능한 동작**을 검증하는 Test를 작성하는 것을 권장합니다.
 
-## Part 4 — Testable design
+---
 
-Identify code that depends directly on:
+## 4단계 — Testable Design
 
-- current time
+다음 외부 환경에 직접 의존하는 코드를 찾습니다.
+
+- 현재 시간
 - Geolocation
 - Local Storage
 
-Change the design so tests can supply controlled alternatives without rewriting the whole application.
+전체 애플리케이션을 다시 작성하지 않고, Test에서 원하는 값을 넣어 통제할 수 있도록 작은 단계로 구조를 개선합니다.
 
-## Part 5 — TDD
+핵심 질문:
 
-New requirement:
+> 이 코드를 실제 GPS, 실제 시간, 실제 저장소 없이도 Test할 수 있는가?
 
-> A report title must contain at least two non-whitespace characters.
+---
 
-Use:
+## 5단계 — TDD
 
-1. RED — write a failing test.
-2. GREEN — implement the minimum code required to pass it.
-3. REFACTOR — improve names/structure while keeping tests green.
+새로운 요구사항:
 
-## Optional Kiro exercise
+> 신고 제목은 공백을 제외하고 최소 2글자 이상이어야 한다.
 
-Use Kiro only after you have decided what should change.
+다음 사이클을 한 번 수행합니다.
 
-Ask it to perform **one small change at a time**, for example:
+1. **RED** — 실패하는 Test를 먼저 작성한다.
+2. **GREEN** — Test를 통과하는 최소 구현을 작성한다.
+3. **REFACTOR** — 모든 Test가 통과하는 상태에서 이름과 구조를 개선한다.
 
-- "Do not change behavior. Extract only the title validation from `saveReport`."
-- "Add tests that describe the current title-validation behavior before changing it."
-- "Make the smallest implementation that passes this new failing test."
+---
 
-Review every change before accepting it.
+## 6단계 — Kiro 활용
+
+Kiro는 무엇을 고칠지 결정하는 도구가 아니라, **우리가 결정한 Refactoring을 빠르게 수행하는 도구**로 사용합니다.
+
+한 번에 한 가지 변경만 요청하는 것을 권장합니다.
+
+예:
+
+> 기존 동작을 변경하지 말고 `saveReport()`에서 제목 검증 로직만 별도 함수로 추출하라.
+
+> 현재 제목 검증 동작을 보존하는 Test를 먼저 추가하라.
+
+> 새로 실패한 Test를 통과시키는 최소 구현만 작성하라.
+
+Kiro가 제안한 변경은 그대로 승인하지 말고 다음을 확인합니다.
+
+- 기존 동작이 유지되는가?
+- 변경 범위가 요청한 것보다 커지지 않았는가?
+- 새로운 중복이나 불필요한 구조가 생기지 않았는가?
+- Test가 실제 동작을 검증하고 있는가?
